@@ -2,6 +2,19 @@ package edu.ensf480.airline.model;
 
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
+import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
+
+import java.util.Objects;
+
+/**
+ * Payment class for the Airline Reservation System
+ *
+ * This class is used to take the booking and user info to charge the client through strategy pattern
+ *
+ * @version 1.0
+ * @since 2023-11-26
+ */
+
 
 @Entity
 @NoArgsConstructor
@@ -11,32 +24,25 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "payment_method", nullable = false)
-    CollectPayment paymentmethod;
-
-    @Column(name = "payment_total", nullable = false)
-    private double total;
-
     @Column(name = "paid", nullable = false)
     private boolean paid = false;
 
-    private static final double comfortSeat = 1.4;
-    private static final double businessClassSeat = 2.5;
-    private static final double cancellationInsurance = 1.25;
-
-    public Payment(){}
-
-    private void calculate_total(Booking booking){
-        total = booking.getFlight().getBaseSeatPrice();
-        String seatClass = booking.getSeat().getSeatClass();
-        if (seatClass == "Comfort") total *= comfortSeat;
-        if (seatClass == "Business-Class") total *= businessClassSeat;
-
-        if (booking.getCancellationInsurance()) total *= cancellationInsurance;
+    /**
+     * Charges a payment based on the booking and customer info
+     * @param booking The booking to pay for
+     * @param cardNumber credit/debit card number
+     * @param year credit/debit card year expiry
+     * @param month credit/debit card month expiry
+     * @param cvc credit/debit card cvc expiry
+     * @param paymentmethod Strategy pattern selecting credit or debit card
+     */
+    public void chargePayment(Booking booking, int cardNumber, int year, int month, int cvc, CollectPayment paymentmethod){
+        paid = paymentmethod.processPayment(cardNumber, year, month, cvc, booking.getTotalCost());
     }
 
-    public boolean collectPayment(int cardNumber, int year, int month, int cvc){
-        paid = paymentmethod.processPayment(cardNumber, year, month, cvc, total);
-        return paid;
-    }
+    /**
+     * Getter to indicate payment success
+     * @return true if successful
+     */
+    private boolean getPaymentSuccess(){return this.paid;}
 }

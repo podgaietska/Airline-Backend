@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * This class is used to represent a flight in the Airline Reservation System.
  *
- * @version 1.0
+ * @version 1.1
  * @since 2021-03-20
  */
 
@@ -56,6 +56,9 @@ public class Flight {
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<Seat> seats;
+
+    public static final double comfortSeatPriceIncrease = 1.4;
+    public static final double businessClassSeatPriceIncrease = 2.5;
 
     /**
      * @param  flightNumber - Unique identifier for the flight
