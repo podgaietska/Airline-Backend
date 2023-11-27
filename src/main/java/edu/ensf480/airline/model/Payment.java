@@ -15,18 +15,16 @@ public class Payment {
     CollectPayment paymentmethod;
 
     @Column(name = "payment_total", nullable = false)
-    private long total;
+    private double total;
 
     @Column(name = "paid", nullable = false)
     private boolean paid = false;
 
-    private final long comfortSeat = (long) 1.4;
-    private final long businessClassSeat = (long) 2.5;
+    private static final double comfortSeat = 1.4;
+    private static final double businessClassSeat = 2.5;
+    private static final double cancellationInsurance = 1.25;
 
-
-    public Payment(Booking booking){
-        calculate_total(booking);
-    }
+    public Payment(){}
 
     private void calculate_total(Booking booking){
         total = booking.getFlight().getBaseSeatPrice();
@@ -34,6 +32,11 @@ public class Payment {
         if (seatClass == "Comfort") total *= comfortSeat;
         if (seatClass == "Business-Class") total *= businessClassSeat;
 
-        
+        if (booking.getCancellationInsurance()) total *= cancellationInsurance;
+    }
+
+    public boolean collectPayment(int cardNumber, int year, int month, int cvc){
+        paid = paymentmethod.processPayment(cardNumber, year, month, cvc, total);
+        return paid;
     }
 }

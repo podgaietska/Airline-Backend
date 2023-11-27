@@ -21,6 +21,9 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long BookingNumber;
 
+    @Column(name = "cancellation_insurance", nullable = false)
+    private boolean cancellationInsurance = false;
+
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight;
@@ -43,6 +46,14 @@ public class Booking {
         this.flight = flight;
         this.user = user;
         this.seat = seat;
+    }
+
+    public void setCancellationInsurance(boolean cancellationInsurance){
+        this.cancellationInsurance = cancellationInsurance;
+    }
+
+    public boolean getCancellationInsurance() {
+        return cancellationInsurance;
     }
 
     public long getBookingNumber() {
