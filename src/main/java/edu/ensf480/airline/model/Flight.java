@@ -50,6 +50,9 @@ public class Flight {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate flightDate;
 
+    @Column(name = "base_seat_price", nullable = false)
+    private long baseSeatPrice;
+
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<Seat> seats;
@@ -62,8 +65,9 @@ public class Flight {
      * @param arrivalTime - Time of arrival
      * @param flightDuration - Duration of flight
      * @param flightDate - Date of flight
+     * @param baseSeatPrice - Price of an ordinary seat
      */
-    public Flight(String flightNumber, String departureAirport, String arrivalAirport, LocalTime departureTime, LocalTime arrivalTime, String flightDuration, LocalDate flightDate){
+    public Flight(String flightNumber, String departureAirport, String arrivalAirport, LocalTime departureTime, LocalTime arrivalTime, String flightDuration, LocalDate flightDate,long baseSeatPrice){
         this.flightNumber = flightNumber;
         this.departureAirport = departureAirport;
         this.arrivalAirport = arrivalAirport;
@@ -71,6 +75,7 @@ public class Flight {
         this.arrivalTime = arrivalTime;
         this.flightDuration = flightDuration;
         this.flightDate = flightDate;
+        this.baseSeatPrice = baseSeatPrice;
     }
 
     /**
@@ -200,5 +205,9 @@ public class Flight {
     public void setSeats(Set<Seat> seats) {
         this.seats = seats;
     }
+
+    public void setBaseSeatPrice(long baseSeatPrice){this.baseSeatPrice = baseSeatPrice;}
+
+    public long getBaseSeatPrice(){return baseSeatPrice;}
 
 }
