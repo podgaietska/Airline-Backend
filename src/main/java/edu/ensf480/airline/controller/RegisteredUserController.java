@@ -7,6 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/user")
 public class RegisteredUserController {
@@ -19,22 +23,28 @@ public class RegisteredUserController {
     }
 
     @PostMapping("/login")
-        public ResponseEntity<RegisteredUser> login(@RequestBody RegisteredUser registeredUser){
+        public ResponseEntity<?> login(@RequestBody RegisteredUser registeredUser){
             RegisteredUser user = registeredUserService.login(registeredUser.getEmail(), registeredUser.getPassword());
             if(user != null){
                 return ResponseEntity.ok(user);
             } else{
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                Map<String, String> error = new HashMap<>();
+                error.put("error", "Invalid credentials, please try again");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
         }
 
     @PostMapping("/register")
-        public ResponseEntity<RegisteredUser> register(@RequestBody RegisteredUser registeredUser){
+        public ResponseEntity<?> register(@RequestBody RegisteredUser registeredUser){
             try{
                 RegisteredUser newUser = registeredUserService.register(registeredUser);
                 return ResponseEntity.ok(newUser);
             } catch (Exception e){
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", e.getMessage());
+
+                // Return the map instead of the exception object
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
             }
         }
 

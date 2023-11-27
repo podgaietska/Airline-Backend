@@ -12,31 +12,20 @@ import lombok.NoArgsConstructor;
  * @since 2021-03-20
  */
 
-@Entity
+@Embeddable
 @NoArgsConstructor
-@Table(name = "mailing_addresses")
-public class BillingAddress {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(name = "street_address", nullable = false)
+public class Address {
     private String street;
 
-    @Column(name = "city", nullable = false)
     private String city;
 
-    @Column(name = "country", nullable = false)
     private String country;
 
-    @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
-    @Column(name = "apartment") // can be blank
     private String apartment;
 
     /**
-     * @param id         - Unique identifier for the mailing address
      * @param street     - Street address of the mailing address
      * @param city       - City of the mailing address
      * @param country    - Country of the mailing address
@@ -44,21 +33,12 @@ public class BillingAddress {
      * @param apartment  - Apartment number of the mailing address
      */
 
-    public BillingAddress(long id, String street, String city, String country, String postalCode, String apartment) {
-        this.id = id;
+    public Address(String street, String city, String country, String postalCode, String apartment) {
         this.street = street;
         this.city = city;
         this.country = country;
         this.postalCode = postalCode;
         this.apartment = apartment;
-    }
-
-    /**
-     * Getter for id
-     * @return the id: UUID
-     */
-    public long getId() {
-        return id;
     }
 
     /**

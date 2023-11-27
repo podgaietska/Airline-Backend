@@ -42,6 +42,7 @@ public class User {
      * @param lname - Last name of the user
      * @param email - Email address of the user
      * @param phone - Phone number of the user
+     * @param dateOfBirth - Date of birth of the user
      */
     public User(String fname, String lname, String email, String phone, LocalDate dateOfBirth) {
         this.fname = fname;
