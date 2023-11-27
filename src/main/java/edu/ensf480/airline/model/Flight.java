@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * This class is used to represent a flight in the Airline Reservation System.
  *
- * @version 1.0
+ * @version 1.1
  * @since 2021-03-20
  */
 
@@ -50,9 +50,15 @@ public class Flight {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate flightDate;
 
+    @Column(name = "base_seat_price", nullable = false)
+    private double baseSeatPrice;
+
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<Seat> seats;
+
+    public static final double comfortSeatPriceIncrease = 1.4;
+    public static final double businessClassSeatPriceIncrease = 2.5;
 
     /**
      * @param  flightNumber - Unique identifier for the flight
@@ -62,8 +68,9 @@ public class Flight {
      * @param arrivalTime - Time of arrival
      * @param flightDuration - Duration of flight
      * @param flightDate - Date of flight
+     * @param baseSeatPrice - Price of an ordinary seat
      */
-    public Flight(String flightNumber, String departureAirport, String arrivalAirport, LocalTime departureTime, LocalTime arrivalTime, String flightDuration, LocalDate flightDate){
+    public Flight(String flightNumber, String departureAirport, String arrivalAirport, LocalTime departureTime, LocalTime arrivalTime, String flightDuration, LocalDate flightDate,double baseSeatPrice){
         this.flightNumber = flightNumber;
         this.departureAirport = departureAirport;
         this.arrivalAirport = arrivalAirport;
@@ -71,6 +78,7 @@ public class Flight {
         this.arrivalTime = arrivalTime;
         this.flightDuration = flightDuration;
         this.flightDate = flightDate;
+        this.baseSeatPrice = baseSeatPrice;
     }
 
     /**
@@ -200,5 +208,17 @@ public class Flight {
     public void setSeats(Set<Seat> seats) {
         this.seats = seats;
     }
+
+    /**
+     * Setter for base seat price
+     * @param baseSeatPrice - Price of an ordinary seat
+     */
+    public void setBaseSeatPrice(double baseSeatPrice){this.baseSeatPrice = baseSeatPrice;}
+
+    /**
+     * Getter for base seat price
+     * @return the base seat price - double
+     */
+    public double getBaseSeatPrice(){return baseSeatPrice;}
 
 }
