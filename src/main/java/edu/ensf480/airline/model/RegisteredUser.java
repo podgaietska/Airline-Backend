@@ -24,6 +24,19 @@ public class RegisteredUser extends User {
 
     @Embedded
     private Address address;
+    /**
+     * @param password - Password of the user
+     * @param membershipNum - Membership number of the user
+     */
+
+    public RegisteredUser(String fname, String lname, String email, String phone, LocalDate dateOfBirth, String password, String membershipNum) {
+        super(fname, lname, email, phone, dateOfBirth);
+        this.password = password;
+        this.membershipNum = membershipNum;
+
+        ScheduledEmail newsletter = ScheduledEmail.getNewsletterEmail();
+        newsletter.addEmail(email);
+    }
 
     public RegisteredUser() {
         super();

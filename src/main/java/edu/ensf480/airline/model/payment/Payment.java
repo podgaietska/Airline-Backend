@@ -70,5 +70,5 @@ public class Payment {
      * Getter to indicate payment success
      * @return true if successful
      */
-    private boolean getPaymentSuccess(){return this.paid;}
+    public boolean getPaymentSuccess(){return this.paid;}
 }

@@ -74,7 +74,9 @@ public class Booking {
 //                taxRate += province.getPST();
 //            }
 //        }
+
         total *= taxRate;
+
     }
 
     /**
@@ -86,19 +88,17 @@ public class Booking {
      * @param paymentType Strategy pattern selecting credit or debit card
      */
 
-    /**
-     * Pays for booking by using class Payment
-     * @param cardNumber credit/debit card number
-     * @param year credit/debit card year expiry
-     * @param month credit/debit card month expiry
-     * @param cvc credit/debit card cvc expiry
-     * @param paymentType Strategy pattern selecting credit or debit card
-     */
-//    public void createPayment(int cardNumber, int year, int month, int cvc, PaymentStrategy paymentType){
-//        calculateCost();
-//        payment = new Payment();
-//        payment.chargePayment(this,cardNumber,year,month,cvc,paymentType);
-//    }
+    public void createPayment(int cardNumber, int year, int month, int cvc, CollectPayment paymentType){
+        calculateCost();
+        payment = new Payment();
+        payment.chargePayment(this,cardNumber,year,month,cvc,paymentType);
+
+        if (payment.getPaymentSuccess()) {
+            SendEmail confirmation = new SendEmail();
+            confirmation.SendBookingEmail(this);
+        }
+    }
+
 
     /**
      * Getter for cancellation insurance

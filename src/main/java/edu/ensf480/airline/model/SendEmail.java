@@ -87,7 +87,7 @@ public class SendEmail {
                 b.getFlight().getArrivalAirport(),
                 b.getSeat().getSeatNumber(),
                 b.getSeat().getSeatClass(),
-                b.getPayment.getTotal());
+                b.getTotalCost());
         SendEmail.sendEmail(message,subject,emails);
     }
     private String cancellationTemplate =
