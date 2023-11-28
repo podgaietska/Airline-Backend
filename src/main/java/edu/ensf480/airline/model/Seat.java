@@ -55,7 +55,7 @@ public class Seat {
 
         seatCost = flight.getBaseSeatPrice();
         if (Objects.equals(seatClass, "Comfort"))seatCost*=Flight.comfortSeatPriceIncrease;
-        if (Objects.equals(seatClass, "Business-Class"))seatCost*=Flight.businessClassSeatPriceIncrease;
+        if (Objects.equals(seatClass, "Business"))seatCost*=Flight.businessClassSeatPriceIncrease;
     }
 
     public Long getId() {
@@ -81,6 +81,5 @@ public class Seat {
     public double getCost() {
         return seatCost;
     }
-
 
 }

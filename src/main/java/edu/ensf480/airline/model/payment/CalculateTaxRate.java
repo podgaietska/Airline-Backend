@@ -1,4 +1,4 @@
-package edu.ensf480.airline.model;
+package edu.ensf480.airline.model.payment;
 
 /**
  * Tax enum for the Airline Reservation System

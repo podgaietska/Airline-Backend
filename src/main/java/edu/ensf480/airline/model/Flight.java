@@ -6,8 +6,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Set;
+import java.util.HashSet;
+
 
 /**
  * Flight class for the Airline Reservation System
@@ -68,9 +69,8 @@ public class Flight {
      * @param arrivalTime - Time of arrival
      * @param flightDuration - Duration of flight
      * @param flightDate - Date of flight
-     * @param baseSeatPrice - Price of an ordinary seat
      */
-    public Flight(String flightNumber, String departureAirport, String arrivalAirport, LocalTime departureTime, LocalTime arrivalTime, String flightDuration, LocalDate flightDate,double baseSeatPrice){
+    public Flight(String flightNumber, String departureAirport, String arrivalAirport, LocalTime departureTime, LocalTime arrivalTime, String flightDuration, LocalDate flightDate, double baseSeatPrice){
         this.flightNumber = flightNumber;
         this.departureAirport = departureAirport;
         this.arrivalAirport = arrivalAirport;
@@ -79,6 +79,34 @@ public class Flight {
         this.flightDuration = flightDuration;
         this.flightDate = flightDate;
         this.baseSeatPrice = baseSeatPrice;
+    }
+
+    /**
+     * Function to create seats for the flight
+     * @return Set of seats on the flight
+     */
+    public Set<Seat> createSeatsForFlight() {
+        System.out.print("Creating seats for flight " + this.flightNumber + "...");
+        Set<Seat> seatMap = new HashSet<>();
+        int businessClassEnd = 6; // Rows 1-6
+        int comfortClassStart = 7, comfortClassEnd = 16; // Rows 7-16
+
+        for (int row = 1; row <= 30; row++) {
+            char[] seatLetters = row <= businessClassEnd ? new char[]{'A', 'B'} : new char[]{'A', 'B', 'C', 'D'};
+            for (char seatLetter : seatLetters) {
+                String seatNumber = row + String.valueOf(seatLetter);
+                String seatClass;
+                if (row <= businessClassEnd) {
+                    seatClass = "Business";
+                } else if (row >= comfortClassStart && row <= comfortClassEnd) {
+                    seatClass = "Comfort";
+                } else {
+                    seatClass = "Ordinary";
+                }
+                seatMap.add(new Seat(seatNumber, seatClass, this, false));
+            }
+        }
+        return seatMap;
     }
 
     /**

@@ -44,7 +44,7 @@ public class SendEmail {
 
         try {
             MimeMessage message = new MimeMessage(session);
-            Address[] recipients = new Address[emailto.length];
+            InternetAddress[] recipients = new InternetAddress[emailto.length];
             for (int i = 0; i < emailto.length; i++) {
                 recipients[i] = new InternetAddress(emailto[i]);
             }
@@ -60,7 +60,6 @@ public class SendEmail {
             //e.printStackTrace();
         }
     }
-
 
     private String bookingTemplate =
             "Hello, {fname} {lname}!\n" +

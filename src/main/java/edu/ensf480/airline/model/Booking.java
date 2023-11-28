@@ -1,10 +1,11 @@
 package edu.ensf480.airline.model;
 
+import edu.ensf480.airline.model.payment.CalculateTaxRate;
+import edu.ensf480.airline.model.payment.PaymentStrategy;
+import edu.ensf480.airline.model.payment.Payment;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
-
-import java.util.Objects;
 
 /**
  * Booking class for the Airline Reservation System
@@ -42,11 +43,10 @@ public class Booking {
     private Seat seat;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "payment_id", referencedColumnName = "paymentId")
+    @JoinColumn(name = "payment_id", referencedColumnName = "id")
     private Payment payment;
 
     private static final double cancellationInsuranceCost = 1.25;
-
 
     /**
      * @param flight        - Flight of the booking
@@ -69,11 +69,11 @@ public class Booking {
         if (cancellationInsurance) total *= cancellationInsuranceCost;
 
         double taxRate = CalculateTaxRate.getGST();
-        for (CalculateTaxRate province:CalculateTaxRate.values()){
-            if(province.toString()==user.getBillingAddress.getProvince()){
-                taxRate += province.getPST();
-            }
-        }
+//        for (CalculateTaxRate province:CalculateTaxRate.values()){
+//            if(province.toString()==user.getAddress.getProvince()){
+//                taxRate += province.getPST();
+//            }
+//        }
         total *= taxRate;
     }
 
@@ -85,44 +85,90 @@ public class Booking {
      * @param cvc credit/debit card cvc expiry
      * @param paymentType Strategy pattern selecting credit or debit card
      */
-    public void createPayment(int cardNumber, int year, int month, int cvc, CollectPayment paymentType){
-        calculateCost();
-        payment = new Payment();
-        payment.chargePayment(this,cardNumber,year,month,cvc,paymentType);
-    }
 
+    /**
+     * Pays for booking by using class Payment
+     * @param cardNumber credit/debit card number
+     * @param year credit/debit card year expiry
+     * @param month credit/debit card month expiry
+     * @param cvc credit/debit card cvc expiry
+     * @param paymentType Strategy pattern selecting credit or debit card
+     */
+//    public void createPayment(int cardNumber, int year, int month, int cvc, PaymentStrategy paymentType){
+//        calculateCost();
+//        payment = new Payment();
+//        payment.chargePayment(this,cardNumber,year,month,cvc,paymentType);
+//    }
 
-    public void setCancellationInsurance(boolean cancellationInsurance){
-        this.cancellationInsurance = cancellationInsurance;
-    }
-
+    /**
+     * Getter for cancellation insurance
+     *
+     * @return the cancellation insurance
+     */
     public boolean getCancellationInsurance() {
         return cancellationInsurance;
     }
 
+    /**
+     * Setter for cancellation insurance
+     *
+     * @param cancellationInsurance - the cancellation insurance
+     */
+    public void setCancellationInsurance(boolean cancellationInsurance){
+        this.cancellationInsurance = cancellationInsurance;
+    }
+
+    /**
+     * Getter for booking number
+     *
+     * @return the booking number
+     */
     public long getBookingNumber() {
         return BookingNumber;
     }
 
+    /**
+     * Getter for flight
+     *
+     * @return the flight
+     */
     public Flight getFlight() {
         return flight;
     }
 
+    /**
+     * Getter for user
+     *
+     * @return the user
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Getter for seat
+     *
+     * @return the seat
+     */
     public Seat getSeat() {
         return seat;
     }
 
+    /**
+     * Getter for payment
+     *
+     * @return the payment
+     */
     public Payment getPayment() {
         return payment;
     }
 
+    /**
+     * Getter for total cost
+     *
+     * @return the total cost
+     */
     public double getTotalCost() {
         return total;
     }
-
-
 }
