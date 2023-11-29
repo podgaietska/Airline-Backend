@@ -88,10 +88,10 @@ public class Booking {
      * @param paymentType Strategy pattern selecting credit or debit card
      */
 
-    public void createPayment(int cardNumber, int year, int month, int cvc, CollectPayment paymentType){
+    public void createPayment(String cardNumber, int year, int month, int cvc, PaymentStrategy paymentType){
         calculateCost();
-        payment = new Payment();
-        payment.chargePayment(this,cardNumber,year,month,cvc,paymentType);
+        payment = new Payment(cardNumber,year,month,cvc,paymentType);
+        payment.processPayment(this);
 
         if (payment.getPaymentSuccess()) {
             SendEmail confirmation = new SendEmail();
