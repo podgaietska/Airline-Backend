@@ -51,6 +51,9 @@ public class AgentController {
         }
     }
 
+    /**
+     * Designed for testing
+     */
     @PostMapping("/newsletter/emailList")
     public ResponseEntity<?> setEmailList(@RequestBody JsonNode request){
         try{
