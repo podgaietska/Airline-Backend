@@ -1,11 +1,13 @@
 package edu.ensf480.airline.model;
 
-import edu.ensf480.airline.model.payment.CalculateTaxRate;
-import edu.ensf480.airline.model.payment.PaymentStrategy;
-import edu.ensf480.airline.model.payment.Payment;
+import edu.ensf480.airline.dto.BookingRequest;
+import edu.ensf480.airline.model.payment.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
+
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * Booking class for the Airline Reservation System
@@ -21,8 +23,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "bookings")
 public class Booking {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long BookingNumber;
+    private String bookingNumber;
 
     @Column(name = "cancellation_insurance", nullable = false)
     private boolean cancellationInsurance = false;
@@ -54,51 +55,67 @@ public class Booking {
      * @param seat          - Seat of the booking
      */
 
-    public Booking(Flight flight, User user, Seat seat) {
+    public Booking(Flight flight, User user, Seat seat, BookingRequest bookingDetails) {
+        this.payment = new Payment(bookingDetails.getCardNumber(), bookingDetails.getExpirationMonth(), bookingDetails.getExpirationYear(), bookingDetails.getCvv());
+        this.bookingNumber = generateBookingNumber();
         this.flight = flight;
         this.user = user;
         this.seat = seat;
-        calculateCost();
+        calculateCost(bookingDetails.getProvince());
     }
 
     /**
      * Determines the booking cost based on seat price, cancellation insurance, provincial and canadian taxes
      */
-    public void calculateCost(){
+    public void calculateCost(String userProvince){
         total = seat.getCost();
         if (cancellationInsurance) total *= cancellationInsuranceCost;
 
         double taxRate = CalculateTaxRate.getGST();
-//        for (CalculateTaxRate province:CalculateTaxRate.values()){
-//            if(province.toString()==user.getAddress.getProvince()){
-//                taxRate += province.getPST();
-//            }
-//        }
-        total *= taxRate;
+        for (CalculateTaxRate province:CalculateTaxRate.values()){
+            if(Objects.equals(province.toString(), userProvince)){
+                taxRate += province.getPST();
+            }
+        }
+        total += total*taxRate;
     }
 
     /**
      * Pays for booking by using class Payment
-     * @param cardNumber credit/debit card number
-     * @param year credit/debit card year expiry
-     * @param month credit/debit card month expiry
-     * @param cvc credit/debit card cvc expiry
-     * @param paymentType Strategy pattern selecting credit or debit card
      */
 
+    public void chargeCard(){
+        this.payment.processPayment(total);
+    }
+
     /**
-     * Pays for booking by using class Payment
-     * @param cardNumber credit/debit card number
-     * @param year credit/debit card year expiry
-     * @param month credit/debit card month expiry
-     * @param cvc credit/debit card cvc expiry
-     * @param paymentType Strategy pattern selecting credit or debit card
+     *
+     * @param bookingDetails
+     * @throws Exception
      */
-//    public void createPayment(int cardNumber, int year, int month, int cvc, PaymentStrategy paymentType){
-//        calculateCost();
-//        payment = new Payment();
-//        payment.chargePayment(this,cardNumber,year,month,cvc,paymentType);
-//    }
+    public void setPaymentStrategy(BookingRequest bookingDetails) throws Exception{
+        PaymentStrategy paymentStrategy;
+
+        if (bookingDetails.getPaymentStrategy().equals("debit")){
+            paymentStrategy = new chargeDebitCard();
+        } else if (bookingDetails.getPaymentStrategy().equals("credit")){
+            paymentStrategy = new chargeCreditCard();
+        } else{
+            throw new Exception("Payment strategy not found");
+        }
+
+        this.payment.setPaymentStrategy(paymentStrategy);
+    }
+
+    private String generateBookingNumber() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder result = new StringBuilder(6);
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            result.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        return result.toString();
+    }
 
     /**
      * Getter for cancellation insurance
@@ -123,8 +140,8 @@ public class Booking {
      *
      * @return the booking number
      */
-    public long getBookingNumber() {
-        return BookingNumber;
+    public String getBookingNumber() {
+        return bookingNumber;
     }
 
     /**
@@ -170,5 +187,9 @@ public class Booking {
      */
     public double getTotalCost() {
         return total;
+    }
+
+    public void setPayment(Payment savedPayment) {
+        this.payment = savedPayment;
     }
 }

@@ -8,13 +8,13 @@ package edu.ensf480.airline.model.payment;
  * @version 1.0
  * @since 2023-11-26
  */
-public class CreditPayment implements PaymentStrategy {
+public class chargeCreditCard implements PaymentStrategy {
 
-    public CreditPayment() {
+    public chargeCreditCard() {
     }
 
     @Override
-    public boolean processPayment(String cardNumber, int expirationYear, int expirationMonth, int cvc, double amount) {
+    public boolean pay(String cardNumber, int expirationYear, int expirationMonth, int cvc, double amount) {
         /*
          * Use third party service to charge a credit card
          */

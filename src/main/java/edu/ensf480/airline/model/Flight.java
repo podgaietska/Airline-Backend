@@ -1,5 +1,6 @@
 package edu.ensf480.airline.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
@@ -52,10 +53,12 @@ public class Flight {
     private LocalDate flightDate;
 
     @Column(name = "base_seat_price", nullable = false)
+    @JsonIgnore
     private double baseSeatPrice;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @JsonIgnore
     private Set<Seat> seats;
 
     public static final double comfortSeatPriceIncrease = 1.4;

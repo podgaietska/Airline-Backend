@@ -28,12 +28,15 @@ public class RegisteredUserService{
         if (registeredUserRepository.findByEmail(newUser.getEmail()).isPresent()) {
             throw new Exception("Email already in use");
         }
+
         String membershipNum;
+
         do {
             membershipNum = newUser.generateMembershipNum();
         } while (registeredUserRepository.existsByMembershipNum(membershipNum));
 
         newUser.setMembershipNum(membershipNum);
+
         return registeredUserRepository.save(newUser);
     }
 }

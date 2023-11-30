@@ -31,8 +31,6 @@ public class SendEmail {
         properties.put("mail.smtp.ssl.trust", "*");
         properties.put("mail.smtp.ssl.protocols", PROTOCOL);
 
-
-
         Authenticator authentication = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -87,7 +85,7 @@ public class SendEmail {
                 b.getFlight().getArrivalAirport(),
                 b.getSeat().getSeatNumber(),
                 b.getSeat().getSeatClass(),
-                b.getPayment.getTotal());
+                b.getTotalCost());
         SendEmail.sendEmail(message,subject,emails);
     }
     private String cancellationTemplate =

@@ -2,22 +2,24 @@ package edu.ensf480.airline.dto;
 
 import java.time.LocalDate;
 
-public class NonMemberDetails {
+public class BookingRequest {
     private String fname;
     private String lname;
     private String email;
     private String phone;
     private LocalDate dateOfBirth;
     private String cardNumber;
+
+    private String province;
     private int expirationMonth;
     private int expirationYear;
     private int cvv;
-    private String paymentStartegy;
+    private String paymentStrategy;
 
-    public NonMemberDetails() {
+    public BookingRequest() {
     }
 
-    public NonMemberDetails(String fname, String lname, String email, String phone, LocalDate dateOfBirth, String cardNumber, int expirationMonth, int expirationYear, int cvv, String paymentStartegy) {
+    public BookingRequest(String fname, String lname, String email, String phone, LocalDate dateOfBirth, String cardNumber, int expirationMonth, int expirationYear, int cvv, String paymentStrategy) {
         this.fname = fname;
         this.lname = lname;
         this.email = email;
@@ -27,7 +29,7 @@ public class NonMemberDetails {
         this.expirationMonth = expirationMonth;
         this.expirationYear = expirationYear;
         this.cvv = cvv;
-        this.paymentStartegy = paymentStartegy;
+        this.paymentStrategy = paymentStrategy;
     }
 
     public String getFname() {
@@ -66,8 +68,12 @@ public class NonMemberDetails {
         return this.cvv;
     }
 
-    public String getPaymentStartegy() {
-        return this.paymentStartegy;
+    public String getPaymentStrategy() {
+        return this.paymentStrategy;
+    }
+
+    public String getProvince() {
+        return this.province;
     }
 
 }

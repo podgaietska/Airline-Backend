@@ -9,6 +9,6 @@ package edu.ensf480.airline.model.payment;
  * @since 2023-11-26
  */
 public interface PaymentStrategy {
-    boolean processPayment(String cardNumber, int expirationYear, int expirationMonth, int cvc, double amount);
+    boolean pay(String cardNumber, int expirationYear, int expirationMonth, int cvc, double amount);
     boolean refundPayment(String cardNumber, int expirationYear, int expirationMonth, int cvc, double amount);
 }

@@ -1,5 +1,6 @@
 package edu.ensf480.airline.model.payment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.ensf480.airline.model.Booking;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Payment {
     private int cvc;
 
     @Transient //will not be saved in the database
+    @JsonIgnore
     private PaymentStrategy paymentStrategy;
 
     @Column(name = "paid", nullable = false)
@@ -48,27 +50,100 @@ public class Payment {
      * @param cvc credit/debit card cvc expiry
      * @param paymentMethod Strategy pattern selecting credit or debit card
      */
-    public Payment(String cardNumber, int expirationMonth, int expirationYear, int cvc, PaymentStrategy paymentMethod){
+    public Payment(String cardNumber, int expirationMonth, int expirationYear, int cvc){
         this.cardNumber = cardNumber;
         this.expirationMonth = expirationMonth;
         this.expirationYear = expirationYear;
         this.cvc = cvc;
-        this.paymentStrategy = paymentMethod;
         this.paid = false;
     }
 
     /**
      * Charges a payment based on the booking and payment info
-     * @param booking The booking to pay for
+     * @param totalCost - the cost of the booking
      */
 
-    public void processPayment(Booking booking){
-        this.paid = this.paymentStrategy.processPayment(this.cardNumber, this.expirationYear, this.expirationMonth, this.cvc, booking.getTotalCost());
+    public void processPayment(double totalCost){
+        this.paid = this.paymentStrategy.pay(this.cardNumber, this.expirationYear, this.expirationMonth, this.cvc, totalCost);
+    }
+
+    /**
+     * Getter for id
+     * @return id
+     */
+
+    public long getId() {
+        return id;
     }
 
     /**
      * Getter to indicate payment success
      * @return true if successful
      */
-    private boolean getPaymentSuccess(){return this.paid;}
+    public boolean getPaymentSuccess(){return this.paid;}
+
+    /**
+     * Getter for card number
+     * @return card number
+     */
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    /**
+     * Getter for expiration month
+     * @return expiration month
+     */
+    public int getExpirationMonth() {
+        return expirationMonth;
+    }
+
+    /**
+     * Getter for expiration year
+     * @return expiration year
+     */
+    public int getExpirationYear() {
+        return expirationYear;
+    }
+
+    /**
+     * Getter for cvc
+     * @return cvc
+     */
+    public int getCvc() {
+        return cvc;
+    }
+
+    /**
+     * Getter for payment strategy
+     * @return payment strategy
+     */
+    public PaymentStrategy getPaymentStrategy() {
+        return paymentStrategy;
+    }
+
+    /**
+     * Setter for payment strategy
+     * @param paymentStrategy - the payment strategy to set
+     */
+    public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
+    }
+
+    /**
+     * To string method
+     */
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", expirationMonth=" + expirationMonth +
+                ", expirationYear=" + expirationYear +
+                ", cvc=" + cvc +
+                ", paymentStrategy=" + paymentStrategy +
+                ", paid=" + paid +
+                '}';
+    }
+
 }
