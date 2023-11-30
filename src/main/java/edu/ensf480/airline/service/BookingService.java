@@ -45,12 +45,21 @@ public class BookingService {
                 .orElseThrow(() -> new Exception("Flight not found"));
         Seat seat = seatRepository.findById(seatId)
                 .orElseThrow(() -> new Exception("Seat not found"));
-        seat.checkIfOccupied();
         User user = userRepository.findByEmailAndLname(passengerDetails.getEmail(), passengerDetails.getLname());
+
         // Check if the user exists
         if (user == null){
             throw new Exception("User not found");
+        } else {
+            //check if user already has a booking for this flight
+            Optional<Booking> existingBooking = bookingRepository.findByUserAndFlight(user, flight);
+            if (existingBooking.isPresent()){
+                throw new Exception("User already has a booking for this flight");
+            }
         }
+
+        // Check if the seat is occupied
+        seat.checkIfOccupied();
 
         // Create booking
         Booking booking = new Booking(flight, user, seat, passengerDetails);
@@ -77,10 +86,9 @@ public class BookingService {
                 .orElseThrow(() -> new Exception("Flight not found"));
         Seat seat = seatRepository.findById(seatId)
                 .orElseThrow(() -> new Exception("Seat not found"));
-        // Check if the seat is occupied
-        seat.checkIfOccupied();
         User user = userRepository.findByEmailAndLname(passengerDetails.getEmail(), passengerDetails.getLname());
 
+        // Check if the user exists
         if (user == null){
             //create new user if does not yet exist
             user = new User(passengerDetails.getFname(), passengerDetails.getLname(), passengerDetails.getEmail(), passengerDetails.getPhone(), passengerDetails.getDateOfBirth());
@@ -91,6 +99,10 @@ public class BookingService {
                 throw new Exception("User already has a booking for this flight");
             }
         }
+
+        // Check if the seat is occupied
+        seat.checkIfOccupied();
+
 
         // Create booking
         Booking booking = new Booking(flight, user, seat, passengerDetails);

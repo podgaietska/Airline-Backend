@@ -48,7 +48,6 @@ public class Payment {
      * @param expirationYear credit/debit card year expiry
      * @param expirationMonth credit/debit card month expiry
      * @param cvc credit/debit card cvc expiry
-     * @param paymentMethod Strategy pattern selecting credit or debit card
      */
     public Payment(String cardNumber, int expirationMonth, int expirationYear, int cvc){
         this.cardNumber = cardNumber;

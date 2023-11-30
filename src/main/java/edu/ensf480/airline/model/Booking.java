@@ -86,6 +86,11 @@ public class Booking {
 
     public void chargeCard(){
         this.payment.processPayment(total);
+
+        if (payment.getPaymentSuccess()) {
+            SendEmail confirmation = new SendEmail();
+            confirmation.SendBookingEmail(this);
+        }
     }
 
     /**
