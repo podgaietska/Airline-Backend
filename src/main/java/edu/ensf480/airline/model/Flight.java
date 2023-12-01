@@ -53,7 +53,6 @@ public class Flight {
     private LocalDate flightDate;
 
     @Column(name = "base_seat_price", nullable = false)
-    @JsonIgnore
     private double baseSeatPrice;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
