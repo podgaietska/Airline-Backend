@@ -143,4 +143,13 @@ public class BookingService {
         return bookings;
     }
 
+    @Transactional
+    public void cancelBooking(String bookingNumber) throws Exception {
+        Booking booking = bookingRepository.findByBookingNumber(bookingNumber)
+                .orElseThrow(() -> new Exception("Booking not found with number: " + bookingNumber));
+        Seat seat = booking.getSeat();
+        seat.setIsOccupied(false);
+        seatRepository.save(seat);
+        bookingRepository.delete(booking);
+    }
 }

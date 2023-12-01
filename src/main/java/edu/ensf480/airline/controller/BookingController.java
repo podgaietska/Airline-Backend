@@ -69,4 +69,20 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
     }
+
+    @DeleteMapping("/cancel/{bookingNumber}")
+    public ResponseEntity<?> cancelBooking(@PathVariable String bookingNumber){
+        try{
+            bookingService.cancelBooking(bookingNumber);
+            Map<String, String> status = new HashMap<>();
+            status.put("status", "Booking cancelled successfully");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(status);
+        } catch (Exception e){
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+    }
+
 }
