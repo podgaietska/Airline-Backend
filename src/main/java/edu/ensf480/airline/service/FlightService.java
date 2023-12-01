@@ -1,6 +1,7 @@
 package edu.ensf480.airline.service;
 
 import edu.ensf480.airline.model.Flight;
+import edu.ensf480.airline.model.Passenger;
 import edu.ensf480.airline.model.Seat;
 import edu.ensf480.airline.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,5 @@ public class FlightService {
         newFlight.setSeats(seats);
         return flightRepository.save(newFlight);
     }
-
 
 }

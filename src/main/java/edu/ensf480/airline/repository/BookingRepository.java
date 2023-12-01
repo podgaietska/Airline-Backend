@@ -12,6 +12,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long>{
     //basic CRUD operations
     Optional<Booking> findByUserAndFlight(Passenger user, Flight flight);
     Optional<Booking> findByBookingNumber(String bookingNumber);
-
     List<Booking> findByUser(Passenger user);
+    List<Booking> findByFlightId(Long flightId);
 }

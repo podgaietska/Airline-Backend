@@ -1,21 +1,38 @@
 package edu.ensf480.airline.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import edu.ensf480.airline.model.Flight;
+import edu.ensf480.airline.model.Passenger;
 import edu.ensf480.airline.model.ScheduledEmail;
+import edu.ensf480.airline.service.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/agent")
 public class AgentController {
+
+    private final BookingService bookingService;
+
+    public AgentController(BookingService bookingService){
+        this.bookingService = bookingService;
+    }
+
+    @GetMapping("/{flightId}/passengers")
+    public ResponseEntity<?> getPassengersOnFlight(@PathVariable Long flightId){
+        try {
+            List<Passenger> passengers = bookingService.getPassengersOnFlight(flightId);
+            return ResponseEntity.ok(passengers);
+        } catch (Exception e){
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        }
+    }
 
     @PostMapping("/newsletter/time")
     public ResponseEntity<?> setNewsletterTime(@RequestBody JsonNode request){
