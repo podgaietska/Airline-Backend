@@ -143,14 +143,4 @@ public class BookingService {
         return bookings;
     }
 
-    public List<Passenger> getPassengersOnFlight(Long flightId) throws Exception {
-        List<Booking> bookings = bookingRepository.findByFlightId(flightId);
-        if (bookings.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return bookingRepository.findByFlightId(flightId).stream()
-                .map(Booking::getUser) // Assuming you have a method getPassenger() in Booking
-                .collect(Collectors.toList());
-    }
 }

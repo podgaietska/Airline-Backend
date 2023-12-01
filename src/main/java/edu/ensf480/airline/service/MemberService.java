@@ -16,12 +16,12 @@ public class MemberService {
         this.registeredUserRepository = registeredUserRepository;
     }
 
-    public Member login(String email, String password){
+    public Member login(String email, String password) throws Exception{
         Optional<Member> registeredUser = registeredUserRepository.findByEmail(email);
         if(registeredUser.isPresent() && registeredUser.get().getPassword().equals(password)){
             return registeredUser.get();
         }
-        return null;
+        throw new Exception("Invalid credentials. Please try again.");
     }
 
     public Member register(Member newUser) throws Exception{

@@ -23,10 +23,10 @@ public class MemberController {
 
     @PostMapping("/login")
         public ResponseEntity<?> login(@RequestBody Member registeredUser){
+        try {
             Member user = registeredUserService.login(registeredUser.getEmail(), registeredUser.getPassword());
-            if(user != null){
-                return ResponseEntity.ok(user);
-            } else{
+            return ResponseEntity.ok(user);
+        } catch (Exception e){
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "Invalid credentials, please try again");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
@@ -46,7 +46,4 @@ public class MemberController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
             }
         }
-
-
-
 }

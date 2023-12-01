@@ -1,9 +1,12 @@
 package edu.ensf480.airline.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import edu.ensf480.airline.model.Agent;
 import edu.ensf480.airline.model.Passenger;
 import edu.ensf480.airline.model.ScheduledEmail;
+import edu.ensf480.airline.service.AgentService;
 import edu.ensf480.airline.service.BookingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,22 +18,46 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/agent")
 public class AgentController {
+    private final AgentService agentService;
 
-    private final BookingService bookingService;
-
-    public AgentController(BookingService bookingService){
-        this.bookingService = bookingService;
+    @Autowired
+    public AgentController(AgentService agentService){
+        this.agentService = agentService;
     }
 
     @GetMapping("/{flightId}/passengers")
     public ResponseEntity<?> getPassengersOnFlight(@PathVariable Long flightId){
         try {
-            List<Passenger> passengers = bookingService.getPassengersOnFlight(flightId);
+            List<Passenger> passengers = agentService.getPassengersOnFlight(flightId);
             return ResponseEntity.ok(passengers);
         } catch (Exception e){
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerAgent(@RequestBody Agent agent){
+        try {
+            Agent newAgent = agentService.register(agent);
+            return ResponseEntity.ok(newAgent);
+        } catch (Exception e){
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Agent agent){
+        try {
+            Agent newAgent = agentService.login(agent.getEmployeeId(), agent.getPassword());
+            return ResponseEntity.ok(newAgent);
+        } catch (Exception e){
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
 
