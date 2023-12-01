@@ -6,15 +6,14 @@ import edu.ensf480.airline.model.Flight;
 import edu.ensf480.airline.model.Seat;
 import edu.ensf480.airline.model.User;
 import edu.ensf480.airline.model.payment.Payment;
-import edu.ensf480.airline.model.payment.chargeCreditCard;
-import edu.ensf480.airline.model.payment.chargeDebitCard;
-import edu.ensf480.airline.model.payment.PaymentStrategy;
 import edu.ensf480.airline.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -123,7 +122,23 @@ public class BookingService {
         }
     }
 
+    public Booking getBookingByBookingNumber(String bookingNumber) throws Exception {
+        return bookingRepository.findByBookingNumber(bookingNumber)
+                .orElseThrow(() -> new Exception("Booking not found with number: " + bookingNumber));
+    }
 
+    public List<Booking> getBookingsByUser(Long userId) throws Exception {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new Exception("User not found");
+        }
 
+        List<Booking> bookings = bookingRepository.findByUser(user.get());
 
+        if (bookings.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return bookings;
+    }
 }

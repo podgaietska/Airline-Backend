@@ -9,10 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1/bookFlight")
+@RequestMapping("api/v1/booking")
 public class BookingController {
     private BookingService bookingService;
 
@@ -45,4 +46,27 @@ public class BookingController {
         }
     }
 
+    @GetMapping("/{bookingNumber}")
+    public ResponseEntity<?> getBooking(@PathVariable String bookingNumber){
+        try{
+            Booking booking = bookingService.getBookingByBookingNumber(bookingNumber);
+            return ResponseEntity.ok(booking);
+        } catch (Exception e){
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getBookingsByUser(@PathVariable Long userId){
+        try{
+            List<Booking> bookings = bookingService.getBookingsByUser(userId);
+            return ResponseEntity.ok(bookings);
+        } catch (Exception e){
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+    }
 }
