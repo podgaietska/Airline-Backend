@@ -37,7 +37,7 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Passenger user;
 
     @ManyToOne
     @JoinColumn(name = "seat_id", nullable = false)
@@ -55,7 +55,7 @@ public class Booking {
      * @param seat          - Seat of the booking
      */
 
-    public Booking(Flight flight, User user, Seat seat, BookingRequest bookingDetails) {
+    public Booking(Flight flight, Passenger user, Seat seat, BookingRequest bookingDetails) {
         this.payment = new Payment(bookingDetails.getCardNumber(), bookingDetails.getExpirationMonth(), bookingDetails.getExpirationYear(), bookingDetails.getCvv());
         this.bookingNumber = generateBookingNumber();
         this.flight = flight;
@@ -163,7 +163,7 @@ public class Booking {
      *
      * @return the user
      */
-    public User getUser() {
+    public Passenger getUser() {
         return user;
     }
 

@@ -33,6 +33,7 @@ public class Payment {
     private int expirationYear;
 
     @Transient //will not be saved in the database
+    @JsonIgnore
     private int cvc;
 
     @Transient //will not be saved in the database

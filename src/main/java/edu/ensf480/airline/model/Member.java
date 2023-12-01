@@ -3,7 +3,6 @@ package edu.ensf480.airline.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * RegisteredUser class for the Airline Reservation System
@@ -15,7 +14,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "registered_users")
-public class RegisteredUser extends User {
+public class Member extends Passenger {
     private static final int MEMBERSHIP_NUM_LENGTH = 9;
     @Column(name = "password", nullable = false)
     private String password;
@@ -29,7 +28,7 @@ public class RegisteredUser extends User {
      * @param membershipNum - Membership number of the user
      */
 
-    public RegisteredUser(String fname, String lname, String email, String phone, LocalDate dateOfBirth, String password, String membershipNum) {
+    public Member(String fname, String lname, String email, String phone, LocalDate dateOfBirth, String password, String membershipNum) {
         super(fname, lname, email, phone, dateOfBirth);
         this.password = password;
         this.membershipNum = membershipNum;
@@ -38,7 +37,7 @@ public class RegisteredUser extends User {
         newsletter.addEmail(email);
     }
 
-    public RegisteredUser() {
+    public Member() {
         super();
     }
 
@@ -50,7 +49,7 @@ public class RegisteredUser extends User {
      * @param dateOfBirth - Date of birth of the user
      * @param password - Password of the user
      */
-    public RegisteredUser(String fname, String lname, String email, String phone, LocalDate dateOfBirth, String password) {
+    public Member(String fname, String lname, String email, String phone, LocalDate dateOfBirth, String password) {
         super(fname, lname, email, phone, dateOfBirth);
         this.password = password;
     }

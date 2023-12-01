@@ -4,7 +4,7 @@ import edu.ensf480.airline.dto.BookingRequest;
 import edu.ensf480.airline.model.Booking;
 import edu.ensf480.airline.model.Flight;
 import edu.ensf480.airline.model.Seat;
-import edu.ensf480.airline.model.User;
+import edu.ensf480.airline.model.Passenger;
 import edu.ensf480.airline.model.payment.Payment;
 import edu.ensf480.airline.repository.*;
 import jakarta.transaction.Transactional;
@@ -44,7 +44,7 @@ public class BookingService {
                 .orElseThrow(() -> new Exception("Flight not found"));
         Seat seat = seatRepository.findById(seatId)
                 .orElseThrow(() -> new Exception("Seat not found"));
-        User user = userRepository.findByEmailAndLname(passengerDetails.getEmail(), passengerDetails.getLname());
+        Passenger user = userRepository.findByEmailAndLname(passengerDetails.getEmail(), passengerDetails.getLname());
 
         // Check if the user exists
         if (user == null){
@@ -85,12 +85,12 @@ public class BookingService {
                 .orElseThrow(() -> new Exception("Flight not found"));
         Seat seat = seatRepository.findById(seatId)
                 .orElseThrow(() -> new Exception("Seat not found"));
-        User user = userRepository.findByEmailAndLname(passengerDetails.getEmail(), passengerDetails.getLname());
+        Passenger user = userRepository.findByEmailAndLname(passengerDetails.getEmail(), passengerDetails.getLname());
 
         // Check if the user exists
         if (user == null){
             //create new user if does not yet exist
-            user = new User(passengerDetails.getFname(), passengerDetails.getLname(), passengerDetails.getEmail(), passengerDetails.getPhone(), passengerDetails.getDateOfBirth());
+            user = new Passenger(passengerDetails.getFname(), passengerDetails.getLname(), passengerDetails.getEmail(), passengerDetails.getPhone(), passengerDetails.getDateOfBirth());
         } else {
             //check if user already has a booking for this flight
             Optional<Booking> existingBooking = bookingRepository.findByUserAndFlight(user, flight);
@@ -128,7 +128,7 @@ public class BookingService {
     }
 
     public List<Booking> getBookingsByUser(Long userId) throws Exception {
-        Optional<User> user = userRepository.findById(userId);
+        Optional<Passenger> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             throw new Exception("User not found");
         }

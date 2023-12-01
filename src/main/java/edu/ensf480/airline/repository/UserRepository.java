@@ -1,8 +1,8 @@
 package edu.ensf480.airline.repository;
 
-import edu.ensf480.airline.model.User;
+import edu.ensf480.airline.model.Passenger;
 import org.springframework.data.jpa.repository.JpaRepository;
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<Passenger, Long>{
     //basic CRUD operations
-    User findByEmailAndLname(String email, String lname);
+    Passenger findByEmailAndLname(String email, String lname);
 }
