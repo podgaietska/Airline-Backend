@@ -48,6 +48,18 @@ public class BookingController {
         }
     }
 
+    @GetMapping("/total")
+    public ResponseEntity<?> getPrice(@RequestParam Long seatId, @RequestParam boolean insurance, @RequestParam String province){
+        try{
+            double price = bookingService.getBookingTotal(seatId, insurance, province);
+            return ResponseEntity.ok(price);
+        } catch (Exception e){
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        }
+    }
+
     @GetMapping("/{bookingNumber}")
     public ResponseEntity<?> getBooking(@PathVariable String bookingNumber){
         try{

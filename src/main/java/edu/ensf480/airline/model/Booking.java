@@ -165,6 +165,15 @@ public class Booking {
     }
 
     /**
+     * Setter for flight
+     *
+     * @param flight - the flight
+     */
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    /**
      * Getter for user
      *
      * @return the user
@@ -189,6 +198,15 @@ public class Booking {
      */
     public Seat getSeat() {
         return seat;
+    }
+
+    /**
+     * Setter for seat
+     *
+     * @param seat - the seat
+     */
+    public void setSeat(Seat seat) {
+        this.seat = seat;
     }
 
     /**

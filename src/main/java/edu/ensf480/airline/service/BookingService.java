@@ -132,6 +132,15 @@ public class BookingService {
                 .orElseThrow(() -> new Exception("Booking not found with number: " + bookingNumber));
     }
 
+    public double getBookingTotal(Long seatId, boolean insurance, String province) throws Exception {
+        Booking booking = new Booking();
+        booking.setSeat(seatRepository.findById(seatId)
+                .orElseThrow(() -> new Exception("Seat not found")));
+        booking.setCancellationInsurance(insurance);
+        booking.calculateCost(province);
+        return booking.getTotalCost();
+    }
+
     public List<Booking> getBookingsByUser(Long userId) throws Exception {
         Optional<Passenger> user = userRepository.findById(userId);
         if (user.isEmpty()) {
