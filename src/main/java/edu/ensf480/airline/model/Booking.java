@@ -93,6 +93,10 @@ public class Booking {
         }
     }
 
+    public void refundPayment(){
+        this.payment.processRefund(total);
+    }
+
     /**
      *
      * @param bookingDetails
@@ -121,6 +125,8 @@ public class Booking {
         }
         return result.toString();
     }
+
+
 
     /**
      * Getter for cancellation insurance
@@ -165,6 +171,15 @@ public class Booking {
      */
     public Passenger getUser() {
         return user;
+    }
+
+    /**
+     * Setter for user
+     *
+     * @param user - the user
+     */
+    public void setUser(Passenger user) {
+        this.user = user;
     }
 
     /**

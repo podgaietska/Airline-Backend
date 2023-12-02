@@ -19,6 +19,8 @@ public class Address {
 
     private String city;
 
+    private String province;
+
     private String country;
 
     private String postalCode;
@@ -33,9 +35,10 @@ public class Address {
      * @param apartment  - Apartment number of the mailing address
      */
 
-    public Address(String street, String city, String country, String postalCode, String apartment) {
+    public Address(String street, String city, String province, String country, String postalCode, String apartment) {
         this.street = street;
         this.city = city;
+        this.province = province;
         this.country = country;
         this.postalCode = postalCode;
         this.apartment = apartment;
@@ -71,6 +74,22 @@ public class Address {
      */
     public void setCity(String city) {
         this.city = city;
+    }
+
+    /**
+     * Getter for province
+     * @return the province: String
+     */
+    public String getProvince() {
+        return province;
+    }
+
+    /**
+     * Setter for province
+     * @param province - Province of the mailing address
+     */
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     /**

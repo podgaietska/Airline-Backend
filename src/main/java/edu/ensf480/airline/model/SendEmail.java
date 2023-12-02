@@ -47,7 +47,7 @@ public class SendEmail {
                 recipients[i] = new InternetAddress(emailto[i]);
             }
             message.setFrom(new InternetAddress(EMAIL_FROM));
-            message.addRecipients(Message.RecipientType.TO, recipients);
+            message.addRecipients(Message.RecipientType.BCC, recipients);
             message.setSubject(subject);
             message.setContent(messageText, "text/html");
 
@@ -59,18 +59,17 @@ public class SendEmail {
         }
     }
 
-    private String bookingTemplate =
-            "Hello, {fname} {lname}!\n" +
-                    "Thank you for your booking with Trusted Flights!\n\n" +
+        private String bookingTemplate =
+                    "<p>Hello, %s %s!<br>" +
+                    "Thank you for your booking with Trusted Flights!<br><br>" +
                     "Please keep this booking confirmation for your reference<hr>" +
-                    "Booking number: {bnum}\n"+
-                    "Date: {date}\n" +
-                    "Departure: {dtime} from {dloc}\n"+
-                    "Arrival: {atime} from {aloc}\n"+
-                    "Seat: {seats} in section {class}\n"+
-                    "Amount Paid: {seats}\n"+
-                    "<hr>Please reach out with any questions!\nSincerely,\nTrusted Flights";
-    public void SendBookingEmail(Booking b){
+                    "Booking number: %s<br>"+
+                    "Date: %s<br>" +
+                    "Departure: %s from %s<br>"+
+                    "Arrival: %s from %s<br>"+
+                    "Seat: %s in section %s<br>"+
+                    "Amount Paid: $%s<br>"+
+                    "<hr>Please reach out with any questions!<br>Sincerely,<br>Trusted Flights</p>";    public void SendBookingEmail(Booking b){
         String[] emails = new String[1];
         emails[0] = b.getUser().getEmail();
         String subject = "Trusted Flights Booking Confirmation";
@@ -89,19 +88,25 @@ public class SendEmail {
         SendEmail.sendEmail(message,subject,emails);
     }
     private String cancellationTemplate =
-            "Hello, {fname} {lname}!\n" +
-                    "Sorry to hear that you cancelled with Trusted Flights!\n\n" +
+            "<p>Hello, %s %s!<br>" +
+                    "Sorry to hear that you cancelled with Trusted Flights!<br><br>" +
                     "Please keep this cancellation for your reference<hr>" +
-                    "Cancelled Booking number: {bnum}\n"+
-                    "<hr>Please reach out with any questions!\nSincerely,\nTrusted Flights";
-    public void SendCancellationEmail(Booking b){
+                    "Cancelled Booking number: %s<br></p>";
+    public void SendCancellationEmail(Booking b,boolean insurance){
         String[] emails = new String[1];
         emails[0] = b.getUser().getEmail();
         String subject = "Trusted Flights Cancellation Confirmation";
-        String message = String.format(bookingTemplate,
+        String message = String.format(cancellationTemplate,
                 b.getUser().getFname(),
                 b.getUser().getLname(),
                 b.getBookingNumber());
+        if (insurance){
+            message += "<p>Based on you having cancellation insurance, the full balance of $" + b.getTotalCost() + " will be refunded to your card automatically</p>";
+        }
+        else {
+            message += "<p>You are not eligible for a refund due no cancellation insurance. We encourage considering it for next time.</p>";
+        }
+        message += "<hr>Please reach out with any questions. We hope you will book with us again soon!<br>Sincerely,<br>Trusted Flights</p>";
         SendEmail.sendEmail(message,subject,emails);
     }
 }

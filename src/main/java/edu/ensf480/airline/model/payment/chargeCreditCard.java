@@ -14,6 +14,11 @@ public class chargeCreditCard implements PaymentStrategy {
     }
 
     @Override
+    public String strategyToString(){
+        return "Credit";
+    }
+
+    @Override
     public boolean pay(String cardNumber, int expirationYear, int expirationMonth, int cvc, double amount) {
         /*
          * Use third party service to charge a credit card
@@ -26,6 +31,6 @@ public class chargeCreditCard implements PaymentStrategy {
         /*
          * Use third party service to charge a credit card
          */
-        return true;
+        return false;
     }
 }

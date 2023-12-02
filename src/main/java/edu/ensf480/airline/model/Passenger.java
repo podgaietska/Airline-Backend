@@ -2,6 +2,8 @@ package edu.ensf480.airline.model;
 
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.Random;
+
 import jakarta.persistence.*;
 
 /**
@@ -37,16 +39,30 @@ public class Passenger extends User{
         this.dateOfBirth = dateOfBirth;
     }
 
+    public long generateRandomId() {
+        Random random = new Random();
+        return 1 + random.nextInt(5000); // Generates a number between 1 and 5000
+    }
+
+
     public Passenger() {
         super();
     }
 
     /**
      * Getter for id
-     * @return the id: UUID
+     * @return the id: Long
      */
     public long getId() {
         return id;
+    }
+
+    /**
+     * Setter for id
+     * @param id: Long
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 
     /**

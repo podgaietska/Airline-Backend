@@ -57,7 +57,6 @@ public class Flight {
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    @JsonIgnore
     private Set<Seat> seats;
 
     public static final double comfortSeatPriceIncrease = 1.4;
@@ -109,6 +108,14 @@ public class Flight {
             }
         }
         return seatMap;
+    }
+
+    /**
+     * Getter for id
+     * @return the id: Long
+     */
+    public Long getId() {
+        return id;
     }
 
     /**

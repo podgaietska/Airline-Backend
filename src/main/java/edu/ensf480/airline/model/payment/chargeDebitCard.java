@@ -14,11 +14,16 @@ public class chargeDebitCard implements PaymentStrategy {
     }
 
     @Override
+    public String strategyToString(){
+        return "Debit";
+    }
+
+    @Override
     public boolean pay(String cardNumber, int expirationYear, int expirationMonth, int cvc, double amount) {
         /*
          * Use third party service to charge a debit card
          */
-        return true;
+        return false;
     }
 
     @Override

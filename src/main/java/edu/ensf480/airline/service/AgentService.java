@@ -5,6 +5,7 @@ import edu.ensf480.airline.model.Booking;
 import edu.ensf480.airline.model.Passenger;
 import edu.ensf480.airline.repository.AgentRepository;
 import edu.ensf480.airline.repository.BookingRepository;
+import edu.ensf480.airline.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,13 @@ public class AgentService {
     private final AgentRepository agentRepository;
     private final BookingRepository bookingRepository;
 
+    private final MemberRepository memberRepository;
+
     @Autowired
-    public AgentService(AgentRepository agentRepository, BookingRepository bookingRepository){
+    public AgentService(AgentRepository agentRepository, BookingRepository bookingRepository, MemberRepository memberRepository){
         this.agentRepository = agentRepository;
         this.bookingRepository = bookingRepository;
+        this.memberRepository = memberRepository;
     }
 
     public List<Passenger> getPassengersOnFlight(Long flightId) throws Exception {

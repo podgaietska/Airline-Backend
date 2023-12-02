@@ -2,6 +2,7 @@ package edu.ensf480.airline.controller;
 
 import edu.ensf480.airline.dto.BookingRequest;
 import edu.ensf480.airline.model.Booking;
+import edu.ensf480.airline.model.SendEmail;
 import edu.ensf480.airline.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/v1/booking")
 public class BookingController {
     private BookingService bookingService;
@@ -75,7 +77,7 @@ public class BookingController {
         try{
             bookingService.cancelBooking(bookingNumber);
             Map<String, String> status = new HashMap<>();
-            status.put("status", "Booking cancelled successfully");
+            status.put("status", "Booking cancelled successfully. Email sent.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(status);
         } catch (Exception e){
             Map<String, String> error = new HashMap<>();

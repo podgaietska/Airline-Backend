@@ -11,4 +11,5 @@ package edu.ensf480.airline.model.payment;
 public interface PaymentStrategy {
     boolean pay(String cardNumber, int expirationYear, int expirationMonth, int cvc, double amount);
     boolean refundPayment(String cardNumber, int expirationYear, int expirationMonth, int cvc, double amount);
+    String strategyToString();
 }

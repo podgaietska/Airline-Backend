@@ -1,10 +1,7 @@
 package edu.ensf480.airline.service;
 
 import edu.ensf480.airline.dto.BookingRequest;
-import edu.ensf480.airline.model.Booking;
-import edu.ensf480.airline.model.Flight;
-import edu.ensf480.airline.model.Seat;
-import edu.ensf480.airline.model.Passenger;
+import edu.ensf480.airline.model.*;
 import edu.ensf480.airline.model.payment.Payment;
 import edu.ensf480.airline.repository.*;
 import jakarta.transaction.Transactional;
@@ -15,26 +12,27 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
     private BookingRepository bookingRepository;
     private SeatRepository seatRepository;
-    private UserRepository userRepository;
+    private PassengerRepository userRepository;
     private FlightRepository flightRepository;
     private PaymentRepository paymentRepository;
     private final JdbcTemplate jdbcTemplate;
+    private final MemberRepository memberRepository;
 
 
     @Autowired
-    public BookingService(BookingRepository bookingRepository, SeatRepository seatRepository, UserRepository userRepository, FlightRepository flightRepository, PaymentRepository paymentRepository, JdbcTemplate jdbcTemplate){
+    public BookingService(BookingRepository bookingRepository, SeatRepository seatRepository, PassengerRepository userRepository, FlightRepository flightRepository, PaymentRepository paymentRepository, JdbcTemplate jdbcTemplate, MemberRepository memberRepository){
         this.bookingRepository = bookingRepository;
         this.seatRepository = seatRepository;
         this.userRepository = userRepository;
         this.flightRepository = flightRepository;
         this.paymentRepository = paymentRepository;
         this.jdbcTemplate = jdbcTemplate;
+        this.memberRepository = memberRepository;
     }
 
     @Transactional
@@ -71,6 +69,8 @@ public class BookingService {
             Payment savedPayment = paymentRepository.save(booking.getPayment());
             booking.setPayment(savedPayment);
             seatRepository.save(seat);
+            SendEmail email = new SendEmail();
+            email.SendBookingEmail(booking);
             return bookingRepository.save(booking);
         } else{
             throw new Exception("Payment failed");
@@ -92,6 +92,10 @@ public class BookingService {
         if (user == null){
             //create new user if does not yet exist
             user = new Passenger(passengerDetails.getFname(), passengerDetails.getLname(), passengerDetails.getEmail(), passengerDetails.getPhone(), passengerDetails.getDateOfBirth());
+//            while (memberRepository.existsById(user.getId() )){
+//                user.setId(user.generateRandomId());
+//            }
+            userRepository.save(user);
         } else {
             //check if user already has a booking for this flight
             Optional<Booking> existingBooking = bookingRepository.findByUserAndFlight(user, flight);
@@ -103,7 +107,6 @@ public class BookingService {
         // Check if the seat is occupied
         seat.checkIfOccupied();
 
-
         // Create booking
         Booking booking = new Booking(flight, user, seat, passengerDetails);
         booking.getSeat().setIsOccupied(true);
@@ -112,10 +115,11 @@ public class BookingService {
         booking.chargeCard();
         if (booking.getPayment().getPaymentSuccess()){
             //Save booking and payment if payment was successful
-            userRepository.save(user);
             Payment savedPayment = paymentRepository.save(booking.getPayment());
             booking.setPayment(savedPayment);
             seatRepository.save(seat);
+            SendEmail email = new SendEmail();
+            email.SendBookingEmail(booking);
             return bookingRepository.save(booking);
         }
         else{
@@ -148,6 +152,11 @@ public class BookingService {
         Booking booking = bookingRepository.findByBookingNumber(bookingNumber)
                 .orElseThrow(() -> new Exception("Booking not found with number: " + bookingNumber));
         Seat seat = booking.getSeat();
+        if (booking.getCancellationInsurance()){
+            booking.refundPayment();
+        }
+        SendEmail email = new SendEmail();
+        email.SendCancellationEmail(booking, booking.getCancellationInsurance());
         seat.setIsOccupied(false);
         seatRepository.save(seat);
         bookingRepository.delete(booking);

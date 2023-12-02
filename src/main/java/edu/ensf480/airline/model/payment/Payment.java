@@ -5,6 +5,8 @@ import edu.ensf480.airline.model.Booking;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 /**
  * Payment class for the Airline Reservation System
  *
@@ -31,6 +33,9 @@ public class Payment {
 
     @Column(name = "expiration_year", nullable = false)
     private int expirationYear;
+
+    @Column(name = "payment_type", nullable = false)
+    private String strategyName;
 
     @Transient //will not be saved in the database
     @JsonIgnore
@@ -65,7 +70,20 @@ public class Payment {
 
     public void processPayment(double totalCost){
         this.paid = this.paymentStrategy.pay(this.cardNumber, this.expirationYear, this.expirationMonth, this.cvc, totalCost);
+        strategyName = paymentStrategy.strategyToString();
     }
+
+    public void processRefund(double totalCost){
+        if (Objects.equals(strategyName, "Debit")){
+            paymentStrategy = new chargeDebitCard();
+        }
+        else{
+            paymentStrategy = new chargeCreditCard();
+        }
+
+        this.paid = this.paymentStrategy.refundPayment(this.cardNumber, this.expirationYear, this.expirationMonth, this.cvc, totalCost);
+    }
+
 
     /**
      * Getter for id
