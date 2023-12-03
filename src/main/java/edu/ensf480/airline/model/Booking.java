@@ -227,6 +227,8 @@ public class Booking {
         return total;
     }
 
+
+
     public void setPayment(Payment savedPayment) {
         this.payment = savedPayment;
     }

@@ -31,10 +31,10 @@ public class AgentController {
         this.memberRepository = memberRepository;
     }
 
-    @GetMapping("/{flightId}/passengers")
-    public ResponseEntity<?> getPassengersOnFlight(@PathVariable Long flightId){
+    @GetMapping("/{flightNumber}/passengers")
+    public ResponseEntity<?> getPassengersOnFlight(@PathVariable String flightNumber){
         try {
-            List<Passenger> passengers = agentService.getPassengersOnFlight(flightId);
+            List<Passenger> passengers = agentService.getPassengersOnFlight(flightNumber);
             return ResponseEntity.ok(passengers);
         } catch (Exception e){
             Map<String, String> errorResponse = new HashMap<>();
