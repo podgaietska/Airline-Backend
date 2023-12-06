@@ -42,7 +42,7 @@ public class FlightController {
         if(flights.isEmpty()){
             Map<String, String> error = new HashMap<>();
             error.put("error", "No flights for the following route or dates found. Please try another search.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
 
         return ResponseEntity.ok(flights);

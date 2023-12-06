@@ -109,13 +109,13 @@ public class BookingService {
 
         // Create booking
         Booking booking = new Booking(flight, user, seat, passengerDetails);
-        booking.getSeat().setIsOccupied(true);
         booking.setCancellationInsurance(insurance);
         booking.setPaymentStrategy(passengerDetails);
         booking.chargeCard();
         if (booking.getPayment().getPaymentSuccess()){
             //Save booking and payment if payment was successful
             Payment savedPayment = paymentRepository.save(booking.getPayment());
+            booking.getSeat().setIsOccupied(true);
             booking.setPayment(savedPayment);
             seatRepository.save(seat);
             SendEmail email = new SendEmail();

@@ -23,7 +23,7 @@ public class chargeDebitCard implements PaymentStrategy {
         /*
          * Use third party service to charge a debit card
          */
-        return false;
+        return true;
     }
 
     @Override
@@ -31,6 +31,6 @@ public class chargeDebitCard implements PaymentStrategy {
         /*
          * Use third party service to charge a debit card
          */
-        return true;
+        return false;
     }
 }

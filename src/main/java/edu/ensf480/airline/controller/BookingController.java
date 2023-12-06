@@ -90,7 +90,7 @@ public class BookingController {
             bookingService.cancelBooking(bookingNumber);
             Map<String, String> status = new HashMap<>();
             status.put("status", "Booking cancelled successfully. Email sent.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(status);
+            return ResponseEntity.status(HttpStatus.OK).body(status);
         } catch (Exception e){
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());
