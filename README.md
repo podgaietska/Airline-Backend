@@ -1,5 +1,5 @@
 # Airline Ticket Reservation System
-This repository is the server side of a ticket reservation system for an airline. The client side of the system can be found [here](https://github.com/podgaietska/Airline-Backend). 
+This repository is the server side of a ticket reservation system for an airline. The client side of the system can be found [here](https://github.com/podgaietska/AirlineSystem-Client). 
 
 ## 🙈  Sneak Peak
 ![ezgif com-video-to-gif](https://github.com/podgaietska/AirlineSystem-Client/assets/113950195/7227ab67-eded-469d-88fc-6e699aa2bb0a)
